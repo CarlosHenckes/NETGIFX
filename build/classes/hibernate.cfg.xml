@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE hibernate-configuration PUBLIC "-//Hibernate/Hibernate Configuration DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+	<session-factory>
+		<property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
+		<!--  Adicionar, se preciso o encoding ?characterEncoding=UTF-8; -->
+		
+		<!-- <property name="hibernate.connection.url">jdbc:mysql://201.76.55.152/conchasbrasil?useSSL=true&amp;autoReconnect=true&amp;createDatabaseIfNotExist=false</property>
+		<property name="hibernate.connection.username">conchasbrasil</property>
+		<property name="hibernate.connection.password">qysw1_yNtqIGzU</property>
+		<property name="hibernate.dialect">org.hibernate.dialect.MySQL5InnoDBDialect</property> -->
+		
+		<!-- <property name="hibernate.connection.url">jdbc:mysql://localhost:3306/netgifx?useSSL=false&amp;autoReconnect=true&amp;createDatabaseIfNotExist=true</property>
+		<property name="hibernate.connection.username">root</property>
+		<property name="hibernate.connection.password">root</property>
+		<property name="hibernate.dialect">org.hibernate.dialect.MySQL5InnoDBDialect</property> -->
+		
+		<property name="connection.driver_class">com.microsoft.sqlserver.jdbc.SQLServerDriver</property>
+	    <property name="connection.url">jdbc:sqlserver://swamp.safesecureweb.com;databaseName=femora</property>
+	    <property name="connection.username">femorale</property>
+	    <property name="connection.password">6RAspEPHac</property>
+	    <property name="dialect">org.hibernate.dialect.SQLServerDialect</property>
+		
+		
+		<!-- <property name="hibernate.show_sql">true</property>
+		<property name="hibernate.format_sql">true</property> -->
+		<property name="hibernate.current_session_context_class">thread</property>
+		<property name="hbm2ddl.auto">update</property>
+		<property name="hibernate.cache">trace</property>
+		<!-- Mapeamento de Classes -->
+		<mapping class="br.com.netgifx.entity.Categoria" />
+		<mapping class="br.com.netgifx.entity.Usuario" />
+		<mapping class="br.com.netgifx.entity.Filme" />
+	</session-factory>
+</hibernate-configuration>
