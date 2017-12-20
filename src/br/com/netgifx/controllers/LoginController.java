@@ -9,8 +9,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import br.com.netgifx.dao.UsuarioDAO;
+import br.com.netgifx.entity.Role;
 import br.com.netgifx.entity.Usuario;
 import br.com.netgifx.util.CookieManager;
 import br.com.netgifx.util.HibernateUtil;
@@ -52,7 +54,7 @@ public class LoginController {
 				return "login";
 		}
 			// tentar novamente
-			m.addAttribute("errMsg", "Usuário e/ou senha inválidos.");
+			m.addAttribute("errMsg", "Usuario e/ou senha invalidos.");
 			return "login";
 	}
 	
@@ -62,5 +64,14 @@ public class LoginController {
 		CookieManager cm = new CookieManager(resp, req);
 		cm.destroyCookies(new String[]{ "netguser","netgid","netgrole" });
 		return "index";
+	}
+	
+	@RequestMapping(value = "/checkforadmin", method = RequestMethod.GET)
+	public @ResponseBody String admin_uri(HttpServletResponse resp, HttpServletRequest req){
+		String ret = "false";
+		CookieManager m = new CookieManager(resp, req);
+		if (m.recoverCookie("netgrole").equalsIgnoreCase(Role.ADMIN.name()))
+				ret = "true";
+		return ret;
 	}
 }

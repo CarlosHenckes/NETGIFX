@@ -42,13 +42,14 @@ public class CookieManager {
 	
 	public void destroyCookies(String[] names){
 		Cookie[] cookies = req.getCookies();
-		
-		for (String name : names) {
-			for (Cookie c : cookies){
-				c = new Cookie(name, null);
-				c.setMaxAge(0);
-				resp.addCookie(c);
-			}
-		}
+		if (cookies != null) { 
+	        for (int i = 0; i < cookies.length; i++) {
+	 
+	            Cookie cookie = cookies[i];
+	            cookies[i].setValue(null);
+	            cookies[i].setMaxAge(0);
+	            resp.addCookie(cookie);
+	        }
+	    }
 	}
 }

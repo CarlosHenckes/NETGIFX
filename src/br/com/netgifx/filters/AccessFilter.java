@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
+import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
@@ -11,6 +12,9 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.ui.Model;
+
+import br.com.netgifx.entity.Role;
 import br.com.netgifx.util.CookieManager;
 
 public class AccessFilter implements Filter {
@@ -22,35 +26,47 @@ public class AccessFilter implements Filter {
 		HttpServletRequest r = (HttpServletRequest) req;
 		String path = r.getRequestURI();
 		
-		if (path.contains("/resources/") || path.contains("/login") || path.contains("/register")){
+		if (path.equalsIgnoreCase("/Netgifx/") ||path.contains("/resources/") || path.contains("/login") || path.contains("/register")){
 			chain.doFilter(req, resp);
 			
 		} else {
 			String cook_usr_role = "";
 			
-			Cookie[] c = r.getCookies();
-			if (c != null){
+			Cookie[] cookie = r.getCookies();
+			if (cookie == null){
+				((HttpServletResponse) resp).sendRedirect(r.getContextPath() + "/login");
+				
+			} else {
 				// recover cookie
 				CookieManager cm = new CookieManager((HttpServletResponse) resp, (HttpServletRequest) req);
 				cook_usr_role = cm.recoverCookie("netgrole");
-
-				// validate authorization
-				if (path.contains("/manager") && cook_usr_role.equalsIgnoreCase("ADMIN")){
-					chain.doFilter(req, resp);			
-				} else if ((path.contains("/content") || 
-						path.contains("/profile") ||
-						path.contains("/watch") ||
-						path.contains("/browse")) && (cook_usr_role.equalsIgnoreCase("USER") || 
-								cook_usr_role.equalsIgnoreCase("ADMIN"))){
+				
+				if (cook_usr_role.equalsIgnoreCase(Role.ADMIN.name()) || cook_usr_role.equalsIgnoreCase(Role.USER.name())){
+					// has cookie values
+					if (path.contains("/manager") && cook_usr_role.equalsIgnoreCase(Role.ADMIN.name())){
 						chain.doFilter(req, resp);
-				} else {
+					} else if (path.contains("/manager") && cook_usr_role.equalsIgnoreCase(Role.USER.name())){
+						((HttpServletResponse) resp).sendRedirect(r.getContextPath() + "/login");
+					} else {
+						chain.doFilter(req, resp);
+					}
+				} else 
+				{
 					((HttpServletResponse) resp).sendRedirect(r.getContextPath() + "/login");
+					
 				}
-			} else {
-				((HttpServletResponse) resp).sendRedirect(r.getContextPath() + "/login");
 			}			
 
 		}
 	}
+	
+	@Override
+	public void init(FilterConfig filterConfig) throws ServletException {
 
+	}
+	
+	@Override
+	public void destroy() {
+		
+	}
 }

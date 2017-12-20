@@ -37,6 +37,7 @@
 	<div class="container">
 		<h3>Erro</h3>
 		<h4>Um erro ocorreu e não foi possível atender ao seu pedido. Tenta novamente mais tarde.</h4>
+		<p>&nnbsp;</p>
 	</div>
 		
 	</jsp:body>
